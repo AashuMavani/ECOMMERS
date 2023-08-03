@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ECOMMERS</string>
+    <string name="Open_Drawer">Open_Drawer</string>
+    <string name="Close_Drawer">Close_Drawer</string>
+</resources>
