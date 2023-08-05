@@ -43,7 +43,7 @@ public class LoginData_Model {
 
         @SerializedName("ID")
         @Expose
-        private int id;
+        private String id;
         @SerializedName("NAME")
         @Expose
         private String name;
@@ -54,11 +54,11 @@ public class LoginData_Model {
         @Expose
         private String password;
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
 
             this.id = id;
         }

@@ -55,7 +55,7 @@ public class Login_Activity extends AppCompatActivity {
                            {
                                Toast.makeText(Login_Activity.this, "User Logged in", Toast.LENGTH_SHORT).show();
                                editor.putBoolean("LoginStatus",true);
-                               editor.putInt("userid",response.body().getUserdata().getId());
+                               editor.putString("userid",response.body().getUserdata().getId());
                                editor.putString("name",response.body().getUserdata().getName());
                                editor.putString("email",response.body().getUserdata().getEmail());
                                editor.commit();
