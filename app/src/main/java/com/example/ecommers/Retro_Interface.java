@@ -4,7 +4,6 @@ import com.example.ecommers.Models.AddProductData_Model;
 import com.example.ecommers.Models.Delete_Data_Model;
 import com.example.ecommers.Models.LoginData_Model;
 import com.example.ecommers.Models.RegistrationData_Model;
-import com.example.ecommers.Models.ShowAllProduct_Model;
 import com.example.ecommers.Models.ViewUser_Model;
 
 import retrofit2.Call;
@@ -56,8 +55,7 @@ public interface Retro_Interface {
                                    @Field("description")String description,
                                    @Field("imagedata")String imagedata,
                                    @Field("imagename")String imagename);
-    @GET("ShowAllproducts.php")
+    @GET("ShowAllProduct.php")
 
-    Call<ShowAllProduct_Model> ShowAllProducts();
-
+    Call<ViewUser_Model> showAllProducts();
 }

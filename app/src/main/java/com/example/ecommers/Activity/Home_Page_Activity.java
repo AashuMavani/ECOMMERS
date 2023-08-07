@@ -18,10 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ecommers.Fragment.AddProduct_Fragment;
-import com.example.ecommers.Fragment.ShowAll_Product_Fragment;
+import com.example.ecommers.Fragment.ShowProduct_Fragment;
 import com.example.ecommers.Fragment.ViewProduct_Fragment;
 import com.example.ecommers.R;
 import com.google.android.material.navigation.NavigationView;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Home_Page_Activity extends AppCompatActivity {
     DrawerLayout drawer_Layout;
@@ -29,6 +33,7 @@ public class Home_Page_Activity extends AppCompatActivity {
     NavigationView navigation_View;
    ImageView header_img;
    TextView header_name,header_email;
+    ArrayList<String> listImages=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,13 @@ public class Home_Page_Activity extends AppCompatActivity {
         toolbar=findViewById(R.id.toolbar);
         navigation_View=findViewById(R.id.navigation_view);
         header_img=findViewById(R.id.header_img);
+
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this,drawer_Layout,toolbar,R.string.Open_Drawer,R.string.Close_Drawer);
+        drawer_Layout.addDrawerListener(toggle);
+        toggle.syncState();
+
         View view=navigation_View.getHeaderView(0);
 
       header_email=view.findViewById(R.id.header_email);
@@ -46,12 +58,18 @@ public class Home_Page_Activity extends AppCompatActivity {
       header_name.setText(MainActivity.preferences.getString("name",null));
       header_email.setText(MainActivity.preferences.getString("email",null));
 
+        String name=header_name.getText().toString();
+        String[] images = new String[0];
+        try {
+            images = getAssets().list("");
+            listImages = new ArrayList<String>(Arrays.asList(images));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("List of images="+listImages);
 
-        setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,drawer_Layout,toolbar,R.string.Open_Drawer,R.string.Close_Drawer);
-        drawer_Layout.addDrawerListener(toggle);
-        toggle.syncState();
+
+
 
         addFragment(new ViewProduct_Fragment());
         navigation_View.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -67,7 +85,7 @@ public class Home_Page_Activity extends AppCompatActivity {
                     replaceFragment(new ViewProduct_Fragment());
                     drawer_Layout.closeDrawer(Gravity.LEFT);
                 } else if (id==R.id.showallproduct) {
-                     replaceFragment(new ShowAll_Product_Fragment());
+                     replaceFragment(new ShowProduct_Fragment());
                      drawer_Layout.closeDrawer(Gravity.LEFT);
                 } else if (id==R.id.logout) {
                     Intent intent=new Intent(Home_Page_Activity.this,Login_Activity.class);
