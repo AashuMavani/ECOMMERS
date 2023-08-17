@@ -4,6 +4,9 @@ import static com.example.ecommers.Activity.MainActivity.preferences;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.ecommers.Adapter.Recyclerview_Adapter;
@@ -39,9 +41,10 @@ public class ViewProduct_Fragment extends Fragment {
     RecyclerView recyclerView;
     String id;
     ArrayList<ViewProductData_Model> productdata = new ArrayList<>();
-    SearchView searchView;
+    androidx.appcompat.widget.SearchView searchView;
     Recyclerview_Adapter adapter;
-    Button sort;
+    AppCompatButton sort;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,9 +52,21 @@ public class ViewProduct_Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_view_product_, container, false);
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(ViewProduct_Fragment.this.getContext()));
-        searchView=view.findViewById(R.id.searchView);
-        sort=view.findViewById(R.id.sortData);
+        searchView = view.findViewById(R.id.searchview);
+        sort=view.findViewById(R.id.sort);
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                FilterData(newText);
+                return false;
+            }
+        });
         sort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,30 +81,13 @@ public class ViewProduct_Fragment extends Fragment {
                         return false;
                     }
                 });
-                //adapter=new Recyclerview_Adapter(getActivity(),productdata);
-                adapter.sortData(productdata);
+                adapter.sortdata(productdata);
             }
         });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                ArrayList<Product_Data> newList=new ArrayList<>();
-
-                filterData(newText);
-
-                return false;
-            }
-        });
-
 
 
         id = preferences.getString("userid", null);
-        Log.d("AAA", "onCreateView: "+id);
+        Log.d("AAA", "onCreateView: " + id);
         Instance_Class.CallApi().ViewProduct(id).enqueue(new Callback<ViewUser_Model>() {
             @Override
             public void onResponse(Call<ViewUser_Model> call, Response<ViewUser_Model> response) {
@@ -100,32 +98,26 @@ public class ViewProduct_Fragment extends Fragment {
                     productdata.addAll(response.body().getProductdata());
 
                     //Log.d("UUU", "onResponse: " + ProductData.get(0).getPNAME());
-                    adapter = new Recyclerview_Adapter(ViewProduct_Fragment.this.getActivity(), productdata, new  Fragment_Interface() {
+                    adapter = new Recyclerview_Adapter(ViewProduct_Fragment.this.getActivity(), productdata, new Fragment_Interface() {
                         @Override
                         public void onFragmentCall(String id, String pName, String pPrice, String pDes, String pImg) {
-                            AddProduct_Fragment fragment=new AddProduct_Fragment();
-                            Bundle bundle=new Bundle();
-                            bundle.putString("id",id);
-                            bundle.putString("name",pName);
-                            bundle.putString("price",pPrice);
-                            bundle.putString("des",pDes);
-                            bundle.putString("img",pImg);
+                            AddProduct_Fragment fragment = new AddProduct_Fragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("id", id);
+                            bundle.putString("name", pName);
+                            bundle.putString("price", pPrice);
+                            bundle.putString("des", pDes);
+                            bundle.putString("img", pImg);
 
                             fragment.setArguments(bundle);
-                            FragmentManager manager=getActivity().getSupportFragmentManager();
-                            FragmentTransaction transaction=manager.beginTransaction();
-                            transaction.replace(R.id.content_view,fragment);
+                            FragmentManager manager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction transaction = manager.beginTransaction();
+                            transaction.replace(R.id.content_view, fragment);
                             transaction.commit();
                         }
 
                     });
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-//                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//                    recyclerView.setLayoutManager(layoutManager);
-//                    MaterialDividerItemDecoration mDividerItemDecoration = new MaterialDividerItemDecoration(recyclerView.getContext(),
-//                            layoutManager.getOrientation());
-//                    recyclerView.addItemDecoration(mDividerItemDecoration);
-                    //myAdapter.notifyDataSetChanged();
+
 
                     recyclerView.setAdapter(adapter);
                     Toast.makeText(getContext(), "Data Found...", Toast.LENGTH_LONG).show();
@@ -145,28 +137,19 @@ public class ViewProduct_Fragment extends Fragment {
         return view;
     }
 
-    private void filterData(String newText)
-    {
-        ArrayList<ViewProductData_Model> filteredlist = new ArrayList<>();
-
-        // running a for loop to compare elements.
+    private void FilterData(String newText) {
+        ArrayList<ViewProductData_Model> filterlist = new ArrayList<>();
         for (ViewProductData_Model item : productdata) {
-            // checking if the entered string matched with any item of our recycler view.
             if (item.getPname().toLowerCase().contains(newText.toLowerCase())) {
-                // if the item is matched we are
-                // adding it to our filtered list.
-                filteredlist.add(item);
-
+                filterlist.add(item);
             }
         }
-        if (filteredlist.isEmpty()) {
-            // if no item is added in filtered list we are
-            // displaying a toast message as no data found.
-            Toast.makeText(ViewProduct_Fragment.this.getContext(), "No Data Found..", Toast.LENGTH_SHORT).show();
+        if (filterlist.isEmpty()) {
+            Toast.makeText(ViewProduct_Fragment.this.getContext(), "No Data found..", Toast.LENGTH_SHORT).show();
         } else {
-            // at last we are passing that filtered
-            // list to our adapter class.
-            adapter.filterList(filteredlist);
+            adapter.filterList(filterlist);
         }
     }
+
+
 }

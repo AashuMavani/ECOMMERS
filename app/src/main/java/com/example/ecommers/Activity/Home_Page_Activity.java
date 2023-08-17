@@ -1,5 +1,7 @@
 package com.example.ecommers.Activity;
 
+import static com.example.ecommers.Activity.MainActivity.editor;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -88,6 +90,8 @@ public class Home_Page_Activity extends AppCompatActivity {
                      replaceFragment(new ShowProduct_Fragment());
                      drawer_Layout.closeDrawer(Gravity.LEFT);
                 } else if (id==R.id.logout) {
+                    editor.putBoolean("LoginStatus",false);
+                    editor.commit();
                     Intent intent=new Intent(Home_Page_Activity.this,Login_Activity.class);
                     startActivity(intent);
 

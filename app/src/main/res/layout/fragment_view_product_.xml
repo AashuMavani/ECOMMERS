@@ -4,17 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.ViewProduct_Fragment"
-    android:orientation="vertical">
-<SearchView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/searchView"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/sortData"
-        android:text="Sort"
-        android:layout_gravity="center"/>
+    android:orientation="vertical"
+    android:background="@drawable/img_1">
+   <androidx.appcompat.widget.SearchView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/searchview"/>
+   <androidx.appcompat.widget.AppCompatButton
+       android:id="@+id/sort"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="sort"
+      android:background="#E17373"/>
+
 <androidx.recyclerview.widget.RecyclerView
     android:layout_width="match_parent"
     android:layout_height="match_parent"

@@ -160,16 +160,17 @@ public class Recyclerview_Adapter extends RecyclerView.Adapter<Recyclerview_Adap
         return productdata.size();
     }
 
-    public void filterList(ArrayList<ViewProductData_Model> filteredlist) {
-        productdata=filteredlist;
+    public void filterList(ArrayList<ViewProductData_Model> filterlist) {
+        productdata=filterlist;
         notifyDataSetChanged();
     }
 
-    public void sortData(ArrayList<ViewProductData_Model> product_data)
-    {
+    public void sortdata(ArrayList<ViewProductData_Model> product_data) {
+
         productdata=product_data;
         notifyDataSetChanged();
     }
+
 
     public class Holder extends RecyclerView.ViewHolder {
         TextView t1,t2,t3;
